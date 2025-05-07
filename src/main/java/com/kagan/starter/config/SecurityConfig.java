@@ -6,6 +6,7 @@ import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,6 +23,18 @@ public class SecurityConfig {
     private static final String REGISTER = "/register";
     private static final String AUTHENTICATE = "/authenticate";
     private static final String REFRESH_TOKEN = "/refreshToken";
+
+    public static final String[] SWAGGER =
+            {
+                    "/swagger-ui.html",
+                    "/v3/api-docs",
+                    "/swagger-ui/**",
+                    "/v3/*",
+                    "/v3//",
+                    "/",
+                    "/v3/api-docs/*",
+                    "/v3/api-docs/**"
+            };
 
 
 
@@ -51,6 +64,7 @@ public class SecurityConfig {
                         request
                                 // Belirtilen endpoint'lere kimlik doğrulama gerekmez
                                 .requestMatchers(REGISTER, AUTHENTICATE, REFRESH_TOKEN).permitAll()
+                                .requestMatchers(SWAGGER).permitAll()
                                 // Diğer tüm endpoint'ler için kimlik doğrulama zorunludur
                                 .anyRequest().authenticated()
                         // Kimlik doğrulama hatalarında özel giriş noktası olarak 'authEntryPoint' kullanılır
